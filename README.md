@@ -51,9 +51,18 @@ Then you pick which cuts to apply, and the skill produces the diff.
 
 ## Install
 
+### Option A — Ask Claude Code to install it for you
+
+Paste this into any Claude Code session:
+
+> Install the `claude-md-harness-audit` skill from https://github.com/vibecodoor/claude-md-harness-audit — clone the repo into `~/.claude/skills/claude-md-harness-audit/`, verify `SKILL.md` and `references/harness-rules.md` are in place, and confirm the skill is registered. Then run it on my global `CLAUDE.md` so I can see a sample audit.
+
+Claude will clone the repo, verify the install, and immediately demo the skill on your own `CLAUDE.md`.
+
+### Option B — Manual
+
 ```bash
-# Clone into your skills directory
-git clone https://github.com/<your-username>/claude-md-harness-audit \
+git clone https://github.com/vibecodoor/claude-md-harness-audit \
   ~/.claude/skills/claude-md-harness-audit
 ```
 
