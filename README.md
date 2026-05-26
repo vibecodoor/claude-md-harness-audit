@@ -55,7 +55,7 @@ Then you pick which cuts to apply, and the skill produces the diff.
 
 Paste this into any Claude Code session:
 
-> Install the `claude-md-harness-audit` skill from https://github.com/vibecodoor/claude-md-harness-audit — clone the repo into `~/.claude/skills/claude-md-harness-audit/`, verify `SKILL.md` and `references/harness-rules.md` are in place, and confirm the skill is registered. Then run it on my global `CLAUDE.md` so I can see a sample audit.
+> Install the `claude-md-harness-audit` skill from https://github.com/vibecodoor/claude-md-harness-audit — clone the repo into `~/.claude/skills/claude-md-harness-audit/`, verify `SKILL.md` is in place, and confirm the skill is registered. Then run it on my global `CLAUDE.md` so I can see a sample audit.
 
 Claude will clone the repo, verify the install, and immediately demo the skill on your own `CLAUDE.md`.
 
@@ -83,17 +83,20 @@ The skill triggers, reads your file + the harness catalog, produces the report, 
 
 ```
 claude-md-harness-audit/
-├── SKILL.md                   ← Workflow + classification rules
-└── references/
-    └── harness-rules.md       ← Catalog of harness sections with verbatim quotes
+└── SKILL.md   ← The entire skill, one file
 ```
 
-`harness-rules.md` is the actual intellectual content. It's sourced from:
+That's it — one file. The skill doesn't ship a static catalog of harness rules. Instead, when you run the audit, Claude compares your `CLAUDE.md` against **the harness loaded in its own active session** — its own system prompt. That means:
 
+- ✅ Always current — no stale snapshot
+- ✅ Matches the exact Claude Code version you're running
+- ✅ Nothing to maintain when Anthropic updates the harness
+- ✅ Quotes are verifiable — they come from the same system prompt your Claude is running on
+
+For background on what the harness contains, see:
 - [Anthropic Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)
 - [Anthropic Memory / CLAUDE.md docs](https://code.claude.com/docs/en/memory)
-- [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) — version-tracked extraction of the harness
-- Live `<claudeMd>` block visible in active Claude Code sessions
+- [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) — version-tracked extraction of the harness across Claude Code versions
 
 ## Why this exists (and what it isn't)
 
@@ -107,22 +110,11 @@ This skill **subtracts**. It will not:
 
 ## Limitations & disclaimer
 
-**The harness changes per Claude Code version.** The catalog in `references/harness-rules.md` is a snapshot dated at the top of the file. If the snapshot is older than ~3 months, treat findings as approximate and verify against the current harness.
-
 **The "cut duplicates" recommendation is grounded in Anthropic's official guidance, but the empirical claim that cuts measurably improve adherence is not yet validated by public experiment.** It's plausible duplication acts as reinforcement instead — Anthropic explicitly rejects this and recommends emphasis (`IMPORTANT:` / `YOU MUST`) over restatement, but the question isn't settled. Use your judgment for high-stakes rules.
 
-**This skill quotes the harness verbatim** so you can verify every recommendation yourself. If a recommended cut surprises you, check the cited section in the catalog before applying.
+**The audit is tied to the specific Claude Code session you run it in.** The report cites the harness loaded in that session — if you upgrade Claude Code, rerun the audit; older recommendations may reference rules that have moved or been removed.
 
-## Updating the harness catalog
-
-When Claude Code ships a new version:
-
-1. Diff the current system prompt against the snapshot date at the top of `references/harness-rules.md`. Sources: [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) or the live `<claudeMd>` block in your session.
-2. Add new sections with verbatim quotes.
-3. Mark removed quotes as `[REMOVED in vYYYY-MM]` rather than deleting — old audits may reference them.
-4. Bump the snapshot date at the top.
-
-PRs welcome.
+**This skill quotes the harness verbatim from your active session** so you can verify every recommendation against the same system prompt your Claude is running on. If a recommended cut surprises you, ask Claude to show you the cited section in its own system prompt before applying.
 
 ## License
 
